@@ -7,7 +7,7 @@ use serenity::{
 use super::random_matching::run;
 
 const REQ_COMMENDS: &str = "!command";
-const RES_COMMENDS: &str = "!matching !ft(Feedback Template) !it(Interview Template)";
+const RES_COMMENDS: &str = "!info !matching !ft(Feedback Template) !it(Interview Template)";
 
 const REQ_MATCHING: &str = "!matching";
 const RES_MATCHING: &str = "
@@ -56,7 +56,7 @@ const RES_INTERVIEW_TEMPLATE: &str = "
 pub struct Handler;
 
 fn string_matching(str1: &str, str2: &str) -> bool {
-  if str1.to_lowercase() == str2 {
+  if str1 == str2 {
     return true;
   }
   false
@@ -65,7 +65,7 @@ fn string_matching(str1: &str, str2: &str) -> bool {
 #[async_trait]
 impl EventHandler for Handler {
   async fn message(&self, ctx: Context, msg: Message) {
-    let input_msg = msg.content;
+    let input_msg = msg.content.to_lowercase();
     if string_matching(&input_msg, REQ_COMMENDS) {
       if let Err(err) = msg.channel_id.say(&ctx.http, RES_COMMENDS).await {
         println!("Error sending message: {:?}", err);
@@ -79,7 +79,6 @@ impl EventHandler for Handler {
         println!("Error sending message: {:?}", err);
       }
     } else if string_matching(&input_msg, REQ_MATCHING) {
-      println!("{}", String::from(&input_msg[0..9]));
       if let Err(err) = msg.channel_id.say(&ctx.http, RES_MATCHING).await {
         println!("Error sending message: {:?}", err);
       }

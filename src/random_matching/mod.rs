@@ -2,109 +2,108 @@ use std::collections::{HashMap, HashSet};
 use rand::Rng;
 
 fn matching(members_array: Vec<String>, pair_num: usize) -> HashMap<String, HashSet<String>> {
-    if members_array.len() < pair_num { return HashMap::new(); }
-    let mut dictionary: HashMap<String, HashSet<String>> = HashMap::new();
-    let members_len = members_array.len();
-
-    for i in 0..members_len {
-        let mem: String = members_array[i].clone();
-        dictionary.insert(mem, HashSet::new());
+  if members_array.len() < pair_num { return HashMap::new(); }
+  let mut dictionary: HashMap<String, HashSet<String>> = HashMap::new();
+  let members_len = members_array.len();  
+  for i in 0..members_len {
+    let mem: String = members_array[i].clone();
+    dictionary.insert(mem, HashSet::new());
+  }
+  let mut complete = false;  
+  let (mut idx, limit) = (0, members_len * 10000);  
+  while complete == false {
+    idx += 1;
+    let ran_num1 = rand::thread_rng().gen_range(0..members_len);
+    let ran_num2 = rand::thread_rng().gen_range(0..members_len);
+    if ran_num1 == ran_num2 { continue; }  
+    let mem1 = members_array[ran_num1].clone();
+    let mem2 = members_array[ran_num2].clone();  
+    let mut set1 = HashSet::new();
+    let mut set2 = HashSet::new();  
+    if let Some(p1) = dictionary.get(&*mem1) {
+      if p1.len() >= pair_num {
+        continue;
+      }
+      set1 = p1.clone();
     }
-
-    let mut complete = false;
-
-    let (mut idx, limit) = (0, members_len * 10000);
-
-    while complete == false {
+      if let Some(p2) = dictionary.get(&*mem2) {
+        if p2.len() >= pair_num {
+          continue;
+        }
+        set2 = p2.clone();
+      }  
+      set1.insert(mem2.clone());
+      set2.insert(mem1.clone());
+      dictionary.insert(mem1, set1);
+      dictionary.insert(mem2, set2);  
+      let mut cnt = 0;
+      for d in &dictionary {
+        if d.1.len() < pair_num {
+          cnt += 1;
+        }
+      }
+      if cnt <= 1 {
+        complete = true;
+      }
+      if idx > limit {
+        break;
+      }
+  }
+  let tmp = dictionary.clone();
+  for d in tmp {
+    if d.1.len() < pair_num {
+      let mut l = d.1.len();
+      let (mut idx, limit) = (0, 10000);
+      while l < pair_num {
         idx += 1;
-        let ran_num1 = rand::thread_rng().gen_range(0..members_len);
-        let ran_num2 = rand::thread_rng().gen_range(0..members_len);
-        if ran_num1 == ran_num2 { continue; }
-
-        let mem1 = members_array[ran_num1].clone();
-        let mem2 = members_array[ran_num2].clone();
-
-        let mut set1 = HashSet::new();
-        let mut set2 = HashSet::new();
-
-        if let Some(p1) = dictionary.get(&*mem1) {
-            if p1.len() >= pair_num {
-                continue;
+        if let Some(p) = dictionary.get(&*d.0) {
+          let mut set1 = p.clone();
+          let mut set2 = HashSet::new();  
+          let ran_num = rand::thread_rng().gen_range(0..members_len);
+          let mem = members_array[ran_num].clone();
+          if mem != *d.0 {
+            l += 1;
+            if let Some(pp) = dictionary.get(&*mem) {
+              set2 = pp.clone();
+            }  
+            if let Some(_) = set1.get(&*mem){}
+            else {
+              set1.insert(mem.clone());
+              set2.insert(d.0.clone());
+              dictionary.insert(d.0.clone(), set1);
+              dictionary.insert(mem, set2);
             }
-            set1 = p1.clone();
-        }
-        if let Some(p2) = dictionary.get(&*mem2) {
-            if p2.len() >= pair_num {
-                continue;
-            }
-            set2 = p2.clone();
-        }
-
-        set1.insert(mem2.clone());
-        set2.insert(mem1.clone());
-        dictionary.insert(mem1, set1);
-        dictionary.insert(mem2, set2);
-
-        let mut cnt = 0;
-        for d in &dictionary {
-            if d.1.len() < pair_num {
-                cnt += 1;
-            }
-        }
-        if cnt <= 1 {
-            complete = true;
+          }
         }
         if idx > limit {
-            break;
+          break;
         }
+      }
     }
-    let tmp = dictionary.clone();
-    for d in tmp {
-        if d.1.len() < pair_num {
-            let mut l = d.1.len();
-            let (mut idx, limit) = (0, 10000);
-            while l < pair_num {
-                idx += 1;
-                if let Some(p) = dictionary.get(&*d.0) {
-                    let mut set1 = p.clone();
-                    let mut set2 = HashSet::new();
-
-                    let ran_num = rand::thread_rng().gen_range(0..members_len);
-                    let mem = members_array[ran_num].clone();
-                    if mem != *d.0 {
-                        l += 1;
-                        if let Some(pp) = dictionary.get(&*mem) {
-                            set2 = pp.clone();
-                        }
-
-                        if let Some(_) = set1.get(&*mem){}
-                        else {
-                            set1.insert(mem.clone());
-                            set2.insert(d.0.clone());
-                            dictionary.insert(d.0.clone(), set1);
-                            dictionary.insert(mem, set2);
-                        }
-                    }
-                }
-                if idx > limit {
-                    break;
-                }
-            }
-        }
-    }
-    dictionary
+  }
+  dictionary
 }
 
 fn make_array(members: String) -> (Vec<String>, usize) {
-    let split: std::str::SplitWhitespace = members.split_whitespace();
-    let arr = split.collect::<Vec<&str>>();
-    let mut re = vec![];
-    for s in arr {
-        re.push(String::from(s));
-    }
-    let size = re[re.len() - 1].parse::<usize>().unwrap();
-    re.pop();
-    (re, size)
+  let split: std::str::SplitWhitespace = members.split_whitespace();
+  let arr = split.collect::<Vec<&str>>();
+  let mut re = vec![];
+  for s in arr {
+    re.push(String::from(s));
+  }
+  let cast = re[re.len() - 1].parse::<usize>();
+
+  let mut size = 2;
+
+  match cast {
+    Ok(r) => {
+      size = r;
+      re.pop();
+    },
+    Err(_) => size = 2,
+  };
+
+  (re, size)
 }
 
 fn output_str(result: HashMap<String, HashSet<String>>) -> String {
@@ -125,7 +124,26 @@ fn output_str(result: HashMap<String, HashSet<String>>) -> String {
 
 pub fn run(members: String) -> String {
   let (arr, pair_num) = make_array(members);
-  let result = matching(arr, pair_num);
-  println!("{:?}", result);
+  if arr.len() < pair_num { return String::from("잘못된 입력입니다. (입력 된 숫자가 매칭 유저수보다 큽니다.)"); }
+
+  let mut result = HashMap::new();
+  let mut s = false;
+  
+  // retry
+  for i in 0..100 {
+    let tmp = arr.clone();
+    result = matching(tmp, pair_num);
+    s = true;
+
+    for r in &result {
+      if r.1.len() < pair_num {
+        s = false;
+        break;
+      }
+    }
+
+    if s == true { break; }
+  }
+  
   output_str(result)
 }
