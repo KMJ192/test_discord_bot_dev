@@ -166,11 +166,11 @@ pub const RES_INTERVIEW_TEMPLATE: &str = "
 
 pub const INFO: &str = "
 Algorithm study discord bot project v0.0.1
-프로젝트 목표
-  - algorithm 스터디 페어프로그래밍 matching 자동화
-  - algorithm 실행 결과 시각화 (text 형태로 출력)
-  - algorithm / Data Structure 코드 제공 자동화
-  - 언어별 표준 라이브러리 메서드 사용법, 예시 제공
+Goal of project
+  - Automation of pair programming matching.
+  - Visualization of algorithm run result. (text type display)
+  - Provision algorithm code / data structure code.
+  - Provision sandard library method, how to use.
 
 input command =>
 !info !matching !ft(Feedback Template) !it(Interview Template) !kmp_code !trie_run !trie_code
