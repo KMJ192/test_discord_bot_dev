@@ -1,6 +1,24 @@
 pub const REQ_COMMENDS: &str = "!commands";
 pub const RES_COMMENDS: &str = "!info !matching !ft(Feedback Template) !it(Interview Template) !kmp_code !trie_run !trie_code";
 
+pub const REQ_KNAPSACK: &str = "!knapsack";
+pub const RES_KNAPSACK: &str = "
+knapsack 알고리즘을 실행합니다.
+데이터 입력 방식
+JSON 형태로 입력합니다.
+capacity -> integer type
+data -> string type
+(data의 value와 weight는 space로 구분, 각 data는 '|' 로 구분)
+ex)
+!knapsack
+```
+{
+  \"capacity\": 5,
+  \"data\": \"3 2 | 4 3 | 5 4 | 6 5\"
+}
+```
+";
+
 pub const REQ_MATCHING: &str = "!matching";
 pub const RES_MATCHING: &str = "
   How to input

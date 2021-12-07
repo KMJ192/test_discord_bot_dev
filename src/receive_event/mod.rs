@@ -7,6 +7,7 @@ use serenity::{
 use super::commands::*;
 use super::random_matching::run;
 use super::ds::trie::build_trie;
+use super::algorithm::knapsack::knapsack_run;
 
 pub struct Handler;
 
@@ -21,6 +22,12 @@ fn string_matching(str1: &str, str2: &str) -> bool {
 impl EventHandler for Handler {
   async fn message(&self, ctx: Context, msg: Message) {
     let input_msg = msg.content.to_lowercase();
+    for c in input_msg.chars() {
+      if c != '!' {
+        return;
+      }
+      break;
+    }
     if string_matching(&input_msg, REQ_COMMENDS) {
       if let Err(err) = msg.channel_id.say(&ctx.http, RES_COMMENDS).await {
         println!("Error sending message: {:?}", err);
@@ -58,6 +65,16 @@ impl EventHandler for Handler {
       }
     } else if string_matching(&input_msg, REQ_TRIE_CODE) {
       if let Err(err) = msg.channel_id.say(&ctx.http, RES_TRIE_CODE).await {
+        println!("Error sending message: {:?}", err);
+      }
+    } else if string_matching(&input_msg, REQ_KNAPSACK) {
+      if let Err(err) = msg.channel_id.say(&ctx.http, RES_KNAPSACK).await {
+        println!("Error sending message: {:?}", err);
+      }
+    } else if input_msg.len() > 9 && string_matching(&String::from(&input_msg[0..9]), REQ_KNAPSACK) {
+      let input_data = String::from(&input_msg[10..]);
+      let result = knapsack_run(String::from(input_data));
+      if let Err(err) = msg.channel_id.say(&ctx.http, &result).await {
         println!("Error sending message: {:?}", err);
       }
     }
