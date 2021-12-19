@@ -125,8 +125,14 @@ async fn dijkstra(ctx: &Context, msg: &Message) -> CommandResult {
   } else {
 let dijkstra_expression = "
 dijkstra(다익스트라) 알고리즘을 실행합니다.
-데이터 입력 방식
+최소비용으로 목표거리까지의 경로를 찾는 알고리즘입니다.
+각 노드는 number 타입이며, 2개의 노드 사이의 비용이 음수일 경우 활용할 수 없는 알고리즘입니다.
+
 JSON 형태로 입력합니다.
+\"start\"에는 시작 노드를 입력합니다.
+\"dest\"는 목표 노드를 입력합니다.
+\"nodeCnt\"에는 노드의 갯수를 입력합니다.
+ex)
 !dijkstra
 ```
 {
