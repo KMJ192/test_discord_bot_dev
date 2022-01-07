@@ -5,6 +5,10 @@
 - rust
 - tokio (async)
 
+### sernity
+
+- https://discordnet.dev/api/Discord.EmbedImage.html
+
 ### 참조
 
 - [heroku에 배포하기](https://github.com/emk/heroku-buildpack-rust)
