@@ -15,7 +15,6 @@ pub mod test;
 
 pub mod receive_event;
 use receive_event::*;
-use db::firebase::*;
 use bot_information::BOTINFORMATION_GROUP;
 use interview_template::INTERVIEWTEMPLATE_GROUP;
 use random_matching::matching_algorithm::MATCHING_GROUP;
