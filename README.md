@@ -52,3 +52,9 @@ worker: ./target/release/[project name]
 ```
 
 5. source code git push
+
+### local 실행
+
+```
+DISCORD_TOKEN="KEY" ./target/release/test_discord_bot
+```
